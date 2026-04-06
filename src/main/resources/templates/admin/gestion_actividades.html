@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Historial de Actividades</title>
+
+	<!-- Bootstrap & FontAwesome -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body class="bg-light" style="font-family: 'Montserrat', sans-serif;">
+
+	<!-- Navbar -->
+	<div th:replace="menu :: navbar"></div>
+
+	<!-- Encabezado -->
+	<section class="container text-center my-5">
+		<h2 class="fw-bold text-primary mb-3">
+			<i class="fas fa-history me-2"></i> Historial de Actividades
+		</h2>
+		<p class="lead text-muted mb-0">Visualiza todas las actividades registradas en la plataforma</p>
+	</section>
+
+	<!-- Contenido principal -->
+	<section class="container mb-5">
+		<div class="card border-0 shadow-lg rounded-4">
+			<div class="card-body p-4">
+
+				<div class="d-flex justify-content-end mb-3">
+					<a href="/admin/reportes" class="btn btn-danger" target="_blank">
+						<i class="fas fa-file-pdf me-1"></i> Exportar PDF
+					</a>
+				</div>
+
+
+				<!-- Tabla de actividades -->
+				<div class="table-responsive">
+					<table class="table table-hover align-middle text-center">
+						<thead class="table-primary">
+							<tr>
+								<th>#</th>
+								<th>Fecha</th>
+								<th>Usuario</th>
+								<th>Costo (S/.)</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="actividad, iter : ${actividades}">
+								<td th:text="${iter.count}" class="fw-semibold"></td>
+								<td th:text="${#dates.format(actividad.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+								<td th:text="${actividad.usuario.nombre}"></td>
+								<td th:text="${actividad.libro != null ? actividad.libro.precio : '0.00'}"></td>
+								<td>
+									<button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+										th:attr="data-bs-target='#detalleModal__' + ${actividad.id}">
+										<i class="fas fa-eye me-1"></i> Ver
+									</button>
+								</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr class="fw-bold">
+								<td colspan="3">Total Gastado:</td>
+								<td class="fw-semibold text-dark" th:text="'S/' + ${totalPrecio}"
+									style="white-space: nowrap;">S/0.00</td>
+							</tr>
+						</tfoot>
+
+					</table>
+				</div>
+
+				<!-- Mensaje si no hay actividades -->
+				<div th:if="${#lists.isEmpty(actividades)}" class="alert alert-warning text-center mt-4 shadow-sm">
+					<i class="fas fa-exclamation-circle me-2"></i> No hay actividades registradas.
+				</div>
+
+			</div>
+		</div>
+	</section>
+
+	<!-- Modal detalle por cada actividad -->
+	<div th:each="actividad : ${actividades}">
+		<div class="modal fade" th:id="'detalleModal__' + ${actividad.id}" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-lg modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">
+							Detalle de Actividad #<span th:text="${actividad.id}"></span>
+						</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+					</div>
+					<div class="modal-body">
+
+						<!-- Imagen del libro -->
+						<div class="text-center mb-4"
+							th:if="${actividad.libro != null and actividad.libro.imagen != null}">
+							<!-- th:src="@{'/img/' + ${actividad.libro.imagen}}" -->
+							<img th:src="@{/uploads/{img}(img=${actividad.libro.imagen})}" alt="Portada del libro"
+								class="img-fluid rounded shadow" style="max-height: 300px;" />
+						</div>
+
+						<!-- Detalles de la actividad -->
+						<ul class="list-group">
+							<li class="list-group-item"><strong>Fecha:</strong> <span
+									th:text="${#dates.format(actividad.fecha, 'dd/MM/yyyy HH:mm')}"></span></li>
+							<li class="list-group-item"><strong>Descripción:</strong> <span
+									th:text="${actividad.descripcion}"></span></li>
+							<li class="list-group-item"
+								th:if="${actividad.libro != null and actividad.libro.categoria != null}">
+								<strong>Categoría:</strong> <span th:text="${actividad.libro.categoria.nombre}"></span>
+							</li>
+
+							<li class="list-group-item"><strong>Usuario:</strong> <span
+									th:text="${actividad.usuario.nombre}"></span></li>
+							<li class="list-group-item"><strong>Email:</strong> <span
+									th:text="${actividad.usuario.email}"></span></li>
+							<li class="list-group-item">
+								<strong>Libro:</strong>
+								<span
+									th:text="${actividad.libro != null ? actividad.libro.titulo : 'N/A'}"></span><br />
+								<small class="text-muted"
+									th:text="${actividad.libro != null ? actividad.libro.autor : ''}"></small>
+							</li>
+							<li class="list-group-item"><strong>Precio:</strong> S/ <span
+									th:text="${actividad.libro != null ? actividad.libro.precio : '0.00'}"></span></li>
+						</ul>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<div th:replace="footer :: footer"></div>
+
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

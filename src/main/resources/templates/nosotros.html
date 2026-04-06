@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosotros - LibroLink</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/nosotros.css}">
+</head>
+<body style="font-family: 'Montserrat', sans-serif;">
+
+    <div th:replace="menu :: navbar"></div>
+
+    <section class="nosotros-header text-center text-light">
+        <div class="overlay"></div>
+        <div class="content">
+            <h1 class="fw-bold">Sobre Nosotros</h1>
+            <p class="lead">LibroLink es una iniciativa del Estado para incentivar la lectura en todos los ciudadanos.</p>
+        </div>
+    </section>
+
+    <section class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10 text-center">
+                <h2 class="fw-bold text-primary mb-4">Nuestra Misión</h2>
+                <p class="text-muted">
+                    En LibroLink creemos que la lectura es un derecho y una herramienta para transformar vidas.
+                    Nuestro objetivo es acercar los libros a todas las personas, facilitando el acceso al conocimiento
+                    y promoviendo la cultura de la lectura como un hábito diario.
+                </p>
+            </div>
+        </div>
+
+        <div class="row mt-5 text-center">
+            <div class="col-md-4">
+                <i class="fa-solid fa-book-open fa-3x text-primary mb-3"></i>
+                <h5 class="fw-semibold">Acceso a Libros</h5>
+                <p class="text-muted">Ofrecemos un catálogo amplio y variado para todos los gustos y edades.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fa-solid fa-users fa-3x text-primary mb-3"></i>
+                <h5 class="fw-semibold">Comunidad Lectora</h5>
+                <p class="text-muted">Creamos espacios donde los ciudadanos comparten, aprenden y crecen juntos.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fa-solid fa-lightbulb fa-3x text-primary mb-3"></i>
+                <h5 class="fw-semibold">Educación y Cultura</h5>
+                <p class="text-muted">Impulsamos programas de fomento a la lectura en instituciones y comunidades.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div th:replace="footer :: footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

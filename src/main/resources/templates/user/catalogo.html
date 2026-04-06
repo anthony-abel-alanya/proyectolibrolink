@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Catálogo de Libros</title>
+
+	<!-- Bootstrap & FontAwesome -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+	<!-- CSS propio -->
+	<link rel="stylesheet" th:href="@{/estilos/catalogo.css}">
+</head>
+
+<body class="bg-light">
+
+	<!-- Navbar -->
+	<div th:replace="menu :: navbar"></div>
+
+	<!-- Encabezado -->
+	<section class="container text-center my-5">
+		<h2 class="fw-bold text-primary mb-3">Catálogo de Libros</h2>
+		<p class="lead text-muted">Explora nuestra colección y encuentra tu próxima lectura favorita</p>
+	</section>
+
+	<!-- Filtros -->
+	<section class="container mb-4">
+		<form id="filtrosForm" action="/user/catalogo/buscar" method="get" class="row g-3">
+			<div class="col-md-4">
+				<input type="text" id="filtroAutor" name="autor" class="form-control shadow-sm"
+					placeholder="Buscar por autor" th:value="${autorSeleccionado}">
+			</div>
+			<div class="col-md-4">
+				<select id="filtroCategoria" name="categoriaId" class="form-select shadow-sm">
+					<option value="">Todas las categorías</option>
+					<option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}"
+						th:selected="${cat.id == categoriaSeleccionada}"></option>
+				</select>
+			</div>
+			<div class="col-md-4">
+				<button type="submit" class="btn btn-primary w-100 shadow">
+					<i class="fas fa-search me-2"></i>Buscar
+				</button>
+			</div>
+		</form>
+
+		<!-- Chips dinámicos -->
+		<div id="activeFilters" class="filter-tags mt-3"></div>
+	</section>
+
+	<!-- Catálogo -->
+	<section class="container mb-5">
+		<div class="row g-4" id="catalogoGrid">
+			<div class="col-md-3 libro-card" th:each="libro : ${libros}">
+				<div class="card h-100 border-0 shadow-sm hover-card">
+					<!-- img a uploads -->
+					<img th:src="@{/uploads/{imagen}(imagen=${libro.imagen})}" class="card-img-top"
+						alt="Imagen del libro" style="height: 250px; object-fit: cover;">
+					<div class="card-body text-center">
+						<h5 class="card-title fw-semibold" th:text="${libro.titulo}"></h5>
+						<p class="card-text text-primary fw-bold mb-2" th:text="'S/' + ${libro.precio}"></p>
+						<p>
+							<span th:if="${libro.stock > 0}" class="text-success fw-bold"
+								th:text="'Stock: ' + ${libro.stock}"></span>
+							<span th:if="${libro.stock == 0}" class="text-danger fw-bold">Agotado</span>
+						</p>
+						<a th:if="${libro.stock > 0}" th:href="@{/user/catalogo/{id}(id=${libro.id})}"
+							class="btn btn-sm btn-outline-primary w-100 mb-2">
+							<i class="fas fa-book-open me-1"></i> Ver más
+						</a>
+						<button th:if="${libro.stock == 0}" class="btn btn-sm btn-secondary w-100" disabled>
+							<i class="fas fa-ban me-1"></i> Agotado
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<nav>
+			<ul id="pagination" class="pagination justify-content-center mt-4"></ul>
+		</nav>
+
+		<p th:if="${#lists.isEmpty(libros)}" class="text-center text-muted mt-4">No se encontraron libros.</p>
+	</section>
+
+	<div th:replace="footer :: footer"></div>
+
+	<!--  -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const items = document.querySelectorAll(".libro-card");
+			const itemsPerPage = 10;
+			const pagination = document.getElementById("pagination");
+			let currentPage = 1;
+
+			function showPage(page) {
+				const start = (page - 1) * itemsPerPage;
+				const end = start + itemsPerPage;
+				items.forEach((item, i) => {
+					item.style.display = (i >= start && i < end) ? "block" : "none";
+				});
+			}
+
+			function setupPagination() {
+				const pageCount = Math.ceil(items.length / itemsPerPage);
+				pagination.innerHTML = "";
+				for (let i = 1; i <= pageCount; i++) {
+					const li = document.createElement("li");
+					li.className = "page-item" + (i === currentPage ? " active" : "");
+					li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+					li.addEventListener("click", e => {
+						e.preventDefault();
+						currentPage = i;
+						showPage(currentPage);
+						setupPagination();
+					});
+					pagination.appendChild(li);
+				}
+			}
+
+			showPage(currentPage);
+			setupPagination();
+		});
+
+		document.addEventListener("DOMContentLoaded", () => {
+			const autor = document.getElementById("filtroAutor").value;
+			const categoria = document.getElementById("filtroCategoria");
+			const activeFilters = document.getElementById("activeFilters");
+
+			if (autor) addFilterTag("Autor: " + autor, "autor");
+			if (categoria.value) addFilterTag("Categoría: " + categoria.options[categoria.selectedIndex].text, "categoriaId");
+
+			function addFilterTag(text, field) {
+				const tag = document.createElement("div");
+				tag.className = "filter-tag";
+				tag.innerHTML = text + ' <span class="remove">&times;</span>';
+				tag.querySelector(".remove").onclick = () => {
+					document.querySelector(`[name=${field}]`).value = "";
+					document.getElementById("filtrosForm").submit();
+				};
+				activeFilters.appendChild(tag);
+			}
+		});
+	</script>
+</body>
+
+</html>

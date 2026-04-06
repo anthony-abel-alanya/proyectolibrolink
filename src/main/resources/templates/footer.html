@@ -1,0 +1,81 @@
+<!-- footer.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<footer class="bg-dark text-light pt-5 pb-4" th:fragment="footer">
+		<div class="container">
+
+			<div class="row">
+
+				<div class="col-md-4 mb-4">
+					<h5 class="fw-bold">LibroLink</h5>
+					<p>
+						LibroLink es tu plataforma para descubrir, solicitar y gestionar préstamos de libros.
+						Conectamos historias con personas e incentivamos la lectura en nuestra comunidad.
+					</p>
+					<p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Av. Cultura 123, Ciudad</p>
+					<p class="mb-0"><i class="fas fa-envelope me-2"></i>contacto@librolink.com</p>
+					<p><i class="fas fa-phone me-2"></i>+51 123 456 789</p>
+				</div>
+
+				<div class="col-md-2 mb-4">
+					<h6 class="fw-bold">Enlaces</h6>
+					<ul class="list-unstyled">
+						<li><a href="/login" class="text-light text-decoration-none">Catálogo</a></li>
+						<li><a href="/registro" class="text-light text-decoration-none">Registro</a></li>
+						<li><a href="/login" class="text-light text-decoration-none">Iniciar sesión</a></li>
+						<li><a href="/" class="text-light text-decoration-none">Contacto</a></li>
+						<li><a href="/nosotros" class="text-light text-decoration-none">Nosotros</a></li>
+					</ul>
+				</div>
+
+				<div class="col-md-3 mb-4">
+					<h6 class="fw-bold">Síguenos</h6>
+					<div class="d-flex flex-wrap">
+						<a href="#" class="me-2 mb-2 d-inline-block p-2 bg-white rounded">
+							<img th:src="@{/img/facebook.png}" alt="Facebook" height="30">
+						</a>
+						<a href="#" class="me-2 mb-2 d-inline-block p-2 bg-white rounded">
+							<img th:src="@{/img/instagram.png}" alt="Instagram" height="30">
+						</a>
+						<a href="#" class="me-2 mb-2 d-inline-block p-2 bg-white rounded">
+							<img th:src="@{/img/twitter.png}" alt="Twitter" height="30">
+						</a>
+						<a href="#" class="me-2 mb-2 d-inline-block p-2 bg-white rounded">
+							<img th:src="@{/img/youtube.png}" alt="YouTube" height="30">
+						</a>
+					</div>
+				</div>
+
+				<div class="col-md-3 mb-4">
+					<h6 class="fw-bold">Métodos de pago</h6>
+					<div class="d-flex flex-wrap align-items-center">
+						<img th:src="@{/img/visa.png}" alt="Visa" class="me-2 mb-2" height="35">
+						<img th:src="@{/img/mastercard_1.png}" alt="Mastercard" class="me-2 mb-2" height="35">
+						<img th:src="@{/img/americanexpress.png}" alt="American Express" class="me-2 mb-2" height="35">
+						<div class="me-2 mb-2 d-flex align-items-center justify-content-center bg-white rounded"
+							style="height:35px; width:50px;">
+							<img th:src="@{/img/dinersclub_1.png}" alt="Diners Club"
+								style="max-height:100%; max-width:100%;">
+						</div>
+						<img th:src="@{/img/pagoefectivo.jpg}" alt="Pago Efectivo" class="me-2 mb-2" height="35">
+						<img th:src="@{/img/libro-reclamaciones.png}" alt="Libro de Reclamaciones" class="me-2 mb-2"
+							height="35">
+					</div>
+				</div>
+
+			</div>
+
+			<hr class="border-secondary">
+
+			<!-- Derechos reservados -->
+			<div class="text-center">
+				<p class="mb-0 fw-bold">© 2025 LibroLink. Todos los derechos reservados.</p>
+			</div>
+
+		</div>
+	</footer>
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+/* login.css */
+@charset "UTF-8";
+
+/* Reset */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Fondo general */
+body {
+	background: url('../img/fondo1.png') no-repeat center center fixed;
+	background-size: cover;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	font-family: 'Montserrat', sans-serif;
+}
+
+/* Caja del login (card principal) */
+.login-box {
+	background: rgba(255, 255, 255, 0.95);
+	backdrop-filter: blur(8px);
+	border-radius: 15px;
+	overflow: hidden;
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+	animation: fadeIn 0.8s ease;
+	width: 100%;
+	max-width: 800px; /* ancho extendido para incluir video */
+}
+
+/* Video lateral */
+.bg-video video {
+	object-fit: cover;
+	height: 100%;
+	width: 100%;
+	transition: transform 0.5s ease;
+}
+
+.bg-video video:hover {
+	transform: scale(1.05);
+}
+
+/* Inputs */
+.login-box input {
+	border-radius: 6px;
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+
+/* Botón con transición */
+.login-box button {
+	transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.login-box button:hover {
+	transform: scale(1.05);
+	background: #0b5ed7;
+}
+
+/* Animación entrada */
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateY(-20px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+

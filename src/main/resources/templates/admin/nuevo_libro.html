@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>LibroLink</title>
+
+	<!-- Bootstrap & FontAwesome -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body class="bg-light" style="font-family: 'Montserrat', sans-serif;">
+
+	<!-- Navbar -->
+	<div th:replace="menu :: navbar"></div>
+
+	<!-- Encabezado -->
+	<section class="container text-center my-5">
+		<h2 class="fw-bold text-primary mb-3">
+			<i class="fa-solid fa-book-medical me-2"></i> Agregar Nuevo Libro
+		</h2>
+		<p class="lead text-muted mb-0">Registra un nuevo título en el catálogo de LibroLink</p>
+	</section>
+
+	<!-- Formulario principal -->
+	<section class="container mb-5">
+		<div class="card border-0 shadow-lg rounded-4">
+			<div class="card-body p-5">
+
+				<!-- Mensajes (compatibilidad con SweetAlert) -->
+				<div th:if="${mensaje}" class="alert alert-success text-center" th:text="${mensaje}"></div>
+				<div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+
+				<form th:action="@{/admin/libros/agregar}" method="post" enctype="multipart/form-data">
+
+					<!-- Datos principales -->
+					<div class="row">
+						<div class="col-md-6 mb-3">
+							<label for="titulo" class="form-label fw-semibold">Título</label>
+							<input type="text" id="titulo" name="titulo" class="form-control"
+								placeholder="Ingrese el título del libro" required>
+						</div>
+
+						<div class="col-md-6 mb-3">
+							<label for="autor" class="form-label fw-semibold">Autor</label>
+							<input type="text" id="autor" name="autor" class="form-control"
+								placeholder="Ingrese el autor del libro" required>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6 mb-3">
+							<label for="categoria" class="form-label fw-semibold">Categoría</label>
+							<select id="categoria" name="categoria" class="form-select" required>
+								<option value="" disabled selected>Seleccione una categoría</option>
+								<option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}">
+								</option>
+							</select>
+						</div>
+
+						<div class="col-md-3 mb-3">
+							<label for="precio" class="form-label fw-semibold">Precio (S/)</label>
+							<input type="number" id="precio" name="precio" step="0.01" min="0" class="form-control"
+								placeholder="0.00" required>
+						</div>
+
+						<div class="col-md-3 mb-3">
+							<label for="stock" class="form-label fw-semibold">Stock</label>
+							<input type="number" id="stock" name="stock" min="0" class="form-control"
+								placeholder="Cantidad disponible" required>
+						</div>
+					</div>
+
+					<div class="mb-3">
+						<label for="descripcion" class="form-label fw-semibold">Descripción</label>
+						<textarea id="descripcion" name="descripcion" class="form-control" rows="4"
+							placeholder="Escribe una breve descripción del libro" required></textarea>
+					</div>
+
+					<!-- Imagen -->
+					<div class="mb-4">
+						<label for="imagen" class="form-label fw-semibold">Imagen del libro</label>
+						<input type="file" id="imagen" name="imagen" class="form-control" accept="image/*">
+						<small class="form-text text-muted">Formatos aceptados: JPG, PNG o GIF</small>
+					</div>
+
+					<!-- Botones -->
+					<div class="d-flex justify-content-center gap-3 mt-4">
+						<button type="submit" class="btn btn-success px-4 shadow-sm">
+							<i class="fa-solid fa-circle-plus me-2"></i> Agregar Libro
+						</button>
+						<a href="/admin/libros" class="btn btn-outline-secondary px-4">
+							<i class="fa-solid fa-xmark me-2"></i> Cancelar
+						</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+
+	<!-- Footer -->
+	<div th:replace="footer :: footer"></div>
+
+	<!-- Bootstrap & SweetAlert -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

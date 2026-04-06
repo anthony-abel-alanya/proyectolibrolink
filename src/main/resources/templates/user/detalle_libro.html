@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title th:text="'Detalle de ' + ${libro.titulo} + ' | LibroLink'">Detalle del Libro</title>
+
+	<!-- Bootstrap & FontAwesome -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-light" style="font-family: 'Montserrat', sans-serif;">
+
+	<div th:replace="menu :: navbar"></div>
+
+	<section class="container text-center my-5">
+		<h2 class="fw-bold text-primary mb-3" th:text="${libro.titulo}">Título del Libro</h2>
+		<p class="lead text-muted mb-0">Descubre más detalles de esta obra literaria</p>
+	</section>
+
+	<section class="container mb-5">
+		<div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+			<div class="row g-0 align-items-center">
+
+				<div class="col-md-5">
+					<!-- img a uploads -->
+					<img th:src="@{/uploads/{imagen}(imagen=${libro.imagen})}"
+						class="img-fluid w-100 h-100 object-fit-cover" alt="Imagen del libro"
+						style="max-height: 500px; object-fit: cover;">
+				</div>
+
+				<div class="col-md-7">
+					<div class="card-body p-5">
+						<h3 class="fw-bold text-primary mb-3" th:text="${libro.titulo}"></h3>
+						<p>
+							<i class="fa-solid fa-user me-2 text-secondary"></i><strong>Autor:</strong>
+							<span th:text="${libro.autor}"></span>
+						</p>
+						<p>
+							<i class="fa-solid fa-layer-group me-2 text-secondary"></i><strong>Categoría:</strong>
+							<span th:text="${libro.categoria.nombre}"></span>
+						</p>
+						<p>
+							<i class="fa-solid fa-align-left me-2 text-secondary"></i><strong>Descripción:</strong>
+						</p>
+						<p class="text-muted" th:text="${libro.descripcion}"></p>
+						<hr>
+						<p class="fs-5 fw-semibold text-success mb-1">
+							<i class="fa-solid fa-tags me-2"></i>Precio: S/ <span th:text="${libro.precio}"></span>
+						</p>
+						<p>
+							<i class="fa-solid fa-box-open me-2 text-secondary"></i>
+							<strong>Stock disponible:</strong>
+							<span th:text="${libro.stock}" class="fw-semibold"></span>
+						</p>
+
+						<div class="mt-4">
+							<a href="/user/catalogo" class="btn btn-outline-secondary me-2">
+								<i class="fa-solid fa-arrow-left me-1"></i> Volver al catálogo
+							</a>
+
+							<a th:href="@{/user/carrito/agregar/{id}(id=${libro.id})}" class="btn btn-primary shadow">
+								<i class="fa-solid fa-cart-plus me-2"></i> Añadir al carrito
+							</a>
+
+							<button th:if="${libro.stock == 0}" class="btn btn-secondary" disabled>
+								<i class="fa-solid fa-ban me-2"></i> No disponible
+							</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</section>
+
+	<!-- Banner -->
+	<section class="text-center position-relative">
+		<div class="d-flex flex-column justify-content-center align-items-center text-white py-5 position-relative"
+			style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/img/Libreria_magica.gif'); background-size: cover; background-position: center; min-height: 250px;">
+			<h3 class="fw-bold mb-3">¿Te gustaría explorar más libros?</h3>
+			<a href="/user/catalogo" class="btn btn-light btn-lg shadow"> Ver catálogo <i
+					class="fas fa-arrow-right ms-2"></i> </a>
+		</div>
+	</section>
+
+	<!-- Footer -->
+	<div th:replace="footer :: footer"></div>
+
+	<!-- Scripts -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>

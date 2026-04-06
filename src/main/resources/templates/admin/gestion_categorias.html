@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LibroLink - Gestión de Categorías</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-light" style="font-family: 'Montserrat', sans-serif;">
+
+<!-- Navbar -->
+<div th:replace="menu :: navbar"></div>
+
+<!-- Encabezado -->
+<section class="container text-center my-5">
+    <h2 class="fw-bold text-primary mb-3">
+        <i class="fa-solid fa-tags me-2"></i> Gestión de Categorías
+    </h2>
+    <p class="lead text-muted mb-0">Administra las categorías de libros en LibroLink</p>
+</section>
+
+<!-- Tabla de categorías -->
+<section class="container mb-5">
+    <div class="card border-0 shadow-lg rounded-4 p-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-semibold">Listado de Categorías</h5>
+            <a href="/admin/categorias/nuevo" class="btn btn-success">
+                <i class="fa-solid fa-circle-plus me-1"></i> Nueva Categoría
+            </a>
+        </div>
+
+        <div th:if="${mensaje}" class="alert alert-success text-center" th:text="${mensaje}"></div>
+        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+
+        <table class="table table-hover align-middle">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="cat : ${categorias}">
+                    <td th:text="${cat.id}"></td>
+                    <td th:text="${cat.nombre}"></td>
+                    <td class="text-center">
+                        <a th:href="@{'/admin/categorias/' + ${cat.id} + '/editar'}" class="btn btn-sm btn-warning">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                        <a th:href="@{'/admin/categorias/' + ${cat.id} + '/eliminar'}" 
+                           class="btn btn-sm btn-danger" 
+                           onclick="return confirm('¿Desea eliminar esta categoría?');">
+                           <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<div th:replace="footer :: footer"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+		setTimeout(() => {
+			document.querySelectorAll('.alert').forEach(el => el.remove());
+		}, 3000);
+	</script>
+</body>
+</html>

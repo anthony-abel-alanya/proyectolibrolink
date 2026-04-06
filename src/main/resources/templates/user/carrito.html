@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Carrito de Compras</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+	<link href="/estilos/carrito.css" rel="stylesheet">
+</head>
+
+<body class="bg-light" style="font-family: 'Montserrat', sans-serif;">
+	<div th:replace="menu :: navbar"></div>
+
+	<section class="container my-5">
+		<h2 class="fw-bold text-primary mb-4">Tu Carrito</h2>
+
+		<div th:if="${mensaje}" class="alert alert-info" th:text="${mensaje}"></div>
+
+		<div th:if="${#lists.isEmpty(carrito)}">
+			<p>No tienes libros en el carrito.</p>
+			<a href="/user/catalogo" class="btn btn-outline-primary">
+				<i class="fa fa-arrow-left me-2"></i> Volver al catálogo
+			</a>
+		</div>
+
+		<div th:if="${!#lists.isEmpty(carrito)}">
+			<table class="table table-striped align-middle">
+				<thead>
+					<tr>
+						<th>Título</th>
+						<th>Precio (S/)</th>
+						<th>Cantidad</th>
+						<th>Subtotal (S/)</th>
+						<th>Acción</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : ${carrito}">
+						<td th:text="${item.titulo}"></td>
+						<td th:text="${item.precio}"></td>
+						<td th:text="${item.cantidad}"></td>
+						<td th:text="${item.precio * item.cantidad}"></td>
+						<td>
+							<a th:href="@{/user/carrito/eliminar/{id}(id=${item.libroId})}"
+								class="btn btn-sm btn-danger"
+								onclick="return confirm('¿Desea eliminar este libro del carrito?');">
+								<i class="fa fa-trash"></i>
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="d-flex justify-content-between align-items-center mt-4">
+				<h4>Total: S/ <span th:text="${total}"></span></h4>
+				<a href="/user/carrito/confirmar" class="btn btn-success btn-lg">
+					<i class="fa fa-check me-2"></i> Confirmar compra
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<div th:replace="footer :: footer"></div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

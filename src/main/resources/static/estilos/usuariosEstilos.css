@@ -1,0 +1,114 @@
+@charset "UTF-8";
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f4f4f4;
+	color: #333;
+}
+
+.container {
+	width: 80%;
+	margin: 0 auto;
+}
+
+header h1 {
+	text-align: center;
+	padding: 20px;
+	background-color: #007bff;
+	color: #fff;
+}
+
+.formulario-usuario, .tabla-usuarios {
+	background-color: #fff;
+	padding: 20px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	margin-top: 20px;
+}
+
+.formulario-usuario h2, .tabla-usuarios h2 {
+	color: #007bff;
+}
+
+.campo {
+	margin-bottom: 15px;
+}
+
+.campo label {
+	display: block;
+	font-weight: bold;
+}
+
+.campo input, .campo select {
+	width: 100%;
+	padding: 8px;
+	margin-top: 5px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+.btn-accion {
+	background-color: #007bff;
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	width: 100%;
+	margin: 10px 5px;
+}
+
+.btn-accion:hover {
+	background-color: #0056b3;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+}
+
+th, td {
+	padding: 12px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+th {
+	background-color: #f2f2f2;
+}
+
+.btn-editar, .btn-eliminar {
+	background-color: #28a745;
+	color: white;
+	padding: 5px 10px;
+	border-radius: 5px;
+	text-decoration: none;
+	margin-right: 5px;
+}
+
+.btn-editar:hover {
+	background-color: #218838;
+}
+
+.btn-eliminar {
+	background-color: #dc3545;
+}
+
+.btn-eliminar:hover {
+	background-color: #c82333;
+}
+
+.volver-panel {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.btn-accion-volver {
+	background-color: #007bff;
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	text-decoration: none;
+}
