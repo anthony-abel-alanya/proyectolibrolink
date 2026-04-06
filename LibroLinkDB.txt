@@ -1,0 +1,189 @@
+DROP DATABASE IF EXISTS librolink_sh;
+create database librolink_sh;
+use librolink_sh;
+
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) UNIQUE
+);
+
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(100),
+    id_rol INT,
+    FOREIGN KEY (id_rol) REFERENCES roles(id)
+);
+
+CREATE TABLE categorias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50)
+);
+
+CREATE TABLE libros (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(100),
+    autor VARCHAR(100),
+    descripcion TEXT,
+    id_categoria INT,
+    imagen VARCHAR(255),
+    precio DECIMAL,
+    stock int,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_categoria) REFERENCES categorias(id)
+);
+
+CREATE TABLE carrito (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    libro_id INT NOT NULL,
+    titulo VARCHAR(255) NOT NULL,
+    precio DOUBLE NOT NULL,
+    cantidad INT NOT NULL,
+    FOREIGN KEY (libro_id) REFERENCES libros(id)
+);
+
+CREATE TABLE actividades (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    descripcion TEXT,
+    fecha DATE,
+    id_usuario INT,
+    id_libro INT,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
+    FOREIGN KEY (id_libro) REFERENCES libros(id)
+);
+CREATE TABLE lecturas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT,
+    id_libro INT,
+    fecha_prestamo DATE,
+    fecha_devolucion DATE,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
+    FOREIGN KEY (id_libro) REFERENCES libros(id)
+);
+
+CREATE TABLE tb_cab_boleta (
+    num_bol CHAR(5) NOT NULL,
+    fch_bol DATE,
+    cod_cliente INT NOT NULL,  -- Cambié cod_usuario a cod_cliente
+    PRIMARY KEY (num_bol),
+    FOREIGN KEY (cod_cliente) REFERENCES usuarios(id)  -- Asegurando que se hace referencia a cod_cliente
+);
+
+CREATE TABLE tb_det_boleta (
+    num_bol CHAR(5) NOT NULL,
+    idprod INT NOT NULL,
+    cantidad INT,
+    preciovta DECIMAL(8,2),
+    PRIMARY KEY (num_bol, idprod),
+    FOREIGN KEY (num_bol) REFERENCES tb_cab_boleta(num_bol),
+    FOREIGN KEY (idprod) REFERENCES libros(id)
+);
+
+ALTER TABLE categorias ADD COLUMN activo BOOLEAN DEFAULT TRUE;
+ALTER TABLE usuarios ADD COLUMN activo BOOLEAN DEFAULT TRUE;
+
+INSERT INTO categorias (nombre, activo) VALUES
+('Programación', TRUE), 
+('Ficción', TRUE),
+('Ciencia Ficción', TRUE),
+('Desarrollo Personal', TRUE),
+('Historia', TRUE),
+('Fantasía', TRUE),
+('Terror', TRUE),
+('Misterio', TRUE),
+('Realismo Magico', TRUE),
+('Thriller Psicologico', TRUE),
+('Exitos Empresariales', TRUE),
+('Universo Juvenil', TRUE),
+('Comics o Mangas', TRUE);
+
+INSERT INTO libros (titulo, autor, descripcion, id_categoria, imagen, precio, stock) VALUES
+('Automate the Boring Stuff with Python', 'Al Sweigart', 'Ideal para principiantes en Python.', 1, 'libro1.jpg', 45.00, 10),
+('Python Crash Course', 'Eric Matthes', 'Curso rápido y práctico de Python.', 1, 'libro2.jpg', 50.00, 8),
+('HTML & CSS: Design and Build Websites', 'Jon Duckett', 'Guía visual para desarrollo web.', 1, 'libro3.jpg', 55.00, 12),
+('JavaScript and JQuery: Interactive Front-End Web Development', 'Jon Duckett', 'Interactividad y front-end moderno.', 1, 'libro4.jpg', 60.00, 9),
+
+('Cien Años de Soledad', 'Gabriel García Márquez', 'Una obra maestra del realismo mágico que narra la historia de la familia Buendía a lo largo de varias generaciones en el pueblo ficticio de Macondo.', 2, 'libro5.jpg', 75.00, 5),
+('1984', 'George Orwell', 'Una distopía sobre un mundo totalitario donde el gobierno controla todos los aspectos de la vida y vigila constantemente a los ciudadanos.', 3, 'libro6.jpg', 80.00, 6),
+('El Principito', 'Antoine de Saint-Exupéry', 'Una historia filosófica sobre un pequeño príncipe de otro planeta que explora temas como el amor, la amistad y el sentido de la vida.', 2, 'libro7.jpg', 40.00, 15),
+('Orgullo y Prejuicio', 'Jane Austen', 'Una novela romántica que examina las dinámicas de clase social, el orgullo y los prejuicios en el siglo XIX en Inglaterra.', 2, 'libro8.jpg', 50.00, 10),
+('Dune', 'Frank Herbert', 'La épica historia de un joven destinado a convertirse en el líder de un planeta desértico lleno de intrigas políticas, religiosas y ecológicas.', 3, 'libro9.jpg', 85.00, 4),
+('Fundación', 'Isaac Asimov', 'Una saga sobre el colapso y resurgimiento de una civilización galáctica a través de la ciencia y la psicohistoria.', 3, 'libro10.jpg', 90.00, 7),
+('Neuromante', 'William Gibson', 'Una obra que define el género ciberpunk, siguiendo la historia de un hacker que realiza trabajos peligrosos en un futuro distópico.', 3, 'libro11.jpg', 65.00, 6),
+('Ready Player One', 'Ernest Cline', 'Una aventura futurista donde los personajes buscan un tesoro escondido en un mundo virtual lleno de referencias a la cultura pop.', 3, 'libro12.jpg', 70.00, 8),
+
+('Hábitos Atómicos', 'James Clear', 'Una guía práctica para construir buenos hábitos y romper los malos, enfocada en pequeños cambios que generan grandes resultados.', 4, 'libro13.jpg', 40.00, 15),
+('Cómo Ganar Amigos e Influir en las Personas', 'Dale Carnegie', 'Estrategias para mejorar las relaciones personales y profesionales a través de la empatía y la comunicación efectiva.', 4, 'libro14.jpg', 50.00, 10),
+('El Poder del Ahora', 'Eckhart Tolle', 'Una exploración de cómo vivir plenamente en el presente y liberarse de las preocupaciones del pasado y el futuro.', 4, 'libro15.jpg', 60.00, 12),
+('Piensa y Hazte Rico', 'Napoleon Hill', 'Un clásico sobre mentalidad y estrategias para alcanzar el éxito financiero y personal.', 4, 'libro16.jpg', 55.00, 9),
+
+('Sapiens: De Animales a Dioses', 'Yuval Noah Harari', 'Una visión fascinante de la historia de la humanidad, desde el surgimiento de las primeras sociedades hasta las complejidades del mundo moderno.', 5, 'libro17.jpg', 65.00, 8),
+('El Diario de Ana Frank', 'Ana Frank', 'El conmovedor relato de una niña judía que se escondió con su familia durante la ocupación nazi en la Segunda Guerra Mundial.', 5, 'libro18.jpg', 55.00, 10),
+('Guns, Germs, and Steel', 'Jared Diamond', 'Un análisis de cómo la geografía y los recursos naturales han moldeado el desarrollo de las civilizaciones humanas.', 5, 'libro19.jpg', 70.00, 6),
+('El Arte de la Guerra', 'Sun Tzu', 'Un antiguo tratado militar chino que también se aplica a estrategias en negocios y liderazgo.', 5, 'libro20.jpg', 40.00, 12),
+
+('El Señor de los Anillos', 'J.R.R. Tolkien', 'Una épica aventura sobre la lucha entre el bien y el mal en la Tierra Media, centrada en un anillo mágico y sus portadores.', 6, 'libro21.jpg', 95.00, 5),
+('Harry Potter y la Piedra Filosofal', 'J.K. Rowling', 'La primera entrega de una saga sobre un joven mago que descubre su herencia mágica y enfrenta a un oscuro enemigo.', 6, 'libro22.jpg', 85.00, 10),
+('La Rueda del Tiempo', 'Robert Jordan', 'Una serie épica que combina magia, profecías y una lucha entre la luz y la oscuridad en un mundo vasto y complejo.', 6, 'libro23.jpg', 90.00, 8),
+('Juego de Tronos', 'George R.R. Martin', 'La lucha por el poder entre varias casas nobles en un mundo de fantasía lleno de traiciones, intrigas y dragones.', 6, 'libro24.jpg', 100.00, 7),
+
+('It (Eso)', 'Stephen King', 'Una novela de terror sobre un grupo de amigos que enfrentan a una entidad malvada que adopta la forma de un payaso.', 7, 'libro25.jpg', 60.00, 10),
+('Drácula', 'Bram Stoker', 'La clásica historia de un vampiro que llega a Inglaterra, desatando una serie de eventos aterradores.', 7, 'libro26.jpg', 50.00, 12),
+('El Exorcista', 'William Peter Blatty', 'Una novela que relata el intento de un sacerdote por exorcizar a una niña poseída por un demonio.', 7, 'libro27.jpg', 65.00, 8),
+('La Llamada de Cthulhu', 'H.P. Lovecraft', 'Un relato de horror cósmico sobre entidades ancestrales que desafían la comprensión humana.', 7, 'libro28.jpg', 55.00, 10),
+
+('El Asesinato de Roger Ackroyd', 'Agatha Christie', 'Una de las obras más célebres de Agatha Christie, esta novela de misterio presenta al detective Hércules Poirot resolviendo el asesinato de Roger Ackroyd en un pequeño pueblo inglés. La trama es famosa por su sorprendente giro final, que rompió las convenciones del género en su época.', 8, 'libro30.jpg', 50.00, 15),
+('El Gran Gatsby', 'F. Scott Fitzgerald', 'Esta novela, considerada una de las mejores del siglo XX, explora la decadencia de la sociedad estadounidense en la década de 1920. A través de la figura de Jay Gatsby, un millonario misterioso y su amor no correspondido por Daisy Buchanan, Fitzgerald ofrece una crítica al sueño americano.', 8, 'libro31.jpg', 60.00, 12),
+('La Sombra del Viento', 'Carlos Ruiz Zafón', 'Ambientada en la Barcelona de la postguerra, esta novela sigue la historia de Daniel Sempere, un joven que descubre un libro olvidado en un misterioso cementerio de libros. Al investigar sobre el autor del libro, se ve envuelto en una intriga que lo lleva a desvelar oscuros secretos del pasado. Es un homenaje a la literatura y una apasionante historia de misterio.', 8, 'libro32.jpg', 65.00, 10),
+
+('La Casa de los Espíritus', 'Isabel Allende', 'Esta novela de realismo mágico abarca varias generaciones de la familia Trueba, explorando temas como el amor, la política y la lucha de clases en Chile. Es una obra rica en emociones y simbolismos, donde lo sobrenatural se mezcla con lo cotidiano.', 9, 'libro33.jpg', 70.00, 7),
+
+('Los Misterios del Amor y la Muerte', 'Álvaro Vizcaíno', 'Esta obra de misterio explora las conexiones entre amor y muerte en una serie de relatos entrelazados que desafían al lector a descubrir la verdad detrás de varios crímenes. El autor utiliza un enfoque innovador para tratar el tema del destino y la fatalidad humana.', 10, 'libro34.jpg', 55.00, 10),
+('La Chica del Tren', 'Paula Hawkins', 'Un thriller psicológico que cuenta la historia de Rachel, una mujer que viaja en tren todos los días y observa las vidas de otras personas. Un día, es testigo de un acontecimiento extraño que la lleva a una investigación llena de giros sorprendentes. La novela juega con la percepción y la memoria de los personajes, manteniendo al lector intrigado hasta el final.', 10, 'libro35.jpg', 60.00, 8),
+
+('Los 7 Hábitos de la Gente Altamente Efectiva', 'Stephen R. Covey', 'Este libro es una guía esencial para lograr un éxito personal y profesional sostenido. Covey presenta siete hábitos que ayudan a las personas a ser más proactivas, enfocadas y efectivas en su vida cotidiana. Es uno de los libros más influyentes en el ámbito de la gestión empresarial y el liderazgo.', 11, 'libro36.jpg', 65.00, 6),
+('La Estrategia del Océano Azul', 'W. Chan Kim y Renée Mauborgne', 'Este libro desafía el concepto tradicional de competencia en los negocios, proponiendo que las empresas deben crear "océanos azules", es decir, mercados sin competencia donde pueden prosperar. A través de ejemplos y estudios de caso, los autores presentan herramientas y enfoques innovadores para la creación de valor y la diferenciación en los negocios.', 11, 'libro37.jpg', 75.00, 8),
+
+('Los Juegos del Hambre', 'Suzanne Collins', 'En un futuro distópico, la humanidad está dividida en distritos, y cada año, los jóvenes son seleccionados para participar en un evento mortal conocido como los Juegos del Hambre, una lucha televisada donde solo uno puede sobrevivir. La historia sigue a Katniss Everdeen, una chica que se ofrece como voluntaria para tomar el lugar de su hermana en los juegos. La serie aborda temas de supervivencia, poder, y resistencia.', 12, 'libro38.jpg', 80.00, 5),
+('Bajo la misma estrella', 'John Green', 'La historia sigue a Hazel Grace Lancaster, una joven que enfrenta la lucha contra el cáncer, y a Augustus Waters, un chico que también lidia con la enfermedad. A través de su relación, descubren lo que significa vivir con la perspectiva de la muerte, pero también el poder del amor y la amistad. Un libro profundo y conmovedor sobre el destino y el tiempo.', 12, 'libro39.jpg', 85.00, 6),
+('El corredor del laberinto', 'James Dashner', 'Thomas se despierta en un ascensor, sin recordar nada de su vida pasada, y se encuentra en un extraño lugar llamado el "Clarón", donde un grupo de jóvenes ha formado una comunidad. En este lugar, deben sobrevivir y encontrar una salida a un gigantesco laberinto lleno de peligros. Junto a otros, Thomas trata de desentrañar el misterio detrás de su encierro y enfrentarse a la amenaza que acecha en el laberinto.', 12, 'libro40.jpg', 70.00, 9),
+
+('Watchmen', 'Alan Moore', 'Este cómic revolucionó el género de los superhéroes al presentarlos de una forma más realista y madura. Ambientado en una versión alternativa de los años 80, los héroes están en su mayoría retirados y viven con el peso de sus acciones pasadas. La historia sigue a un grupo de vigilantes que se ven envueltos en una intriga que podría desencadenar una guerra nuclear. Una obra profunda sobre la moralidad, el poder y el destino.', 13, 'libro41.jpg', 50.00, 10),
+('One Piece', 'Eiichiro Oda', 'Un manga que sigue las aventuras de Monkey D. Luffy y su tripulación de piratas en su búsqueda para encontrar el legendario tesoro conocido como "One Piece". La serie está llena de acción, amistad y lecciones sobre la perseverancia y los sueños.', 13, 'libro42.jpg', 45.00, 12);
+
+
+INSERT INTO roles (nombre) VALUES ('ROLE_ADMIN'), ('ROLE_USER');
+
+INSERT INTO usuarios (id, nombre, email, password, id_rol, activo) VALUES
+(1, 'admin',  'admin@gmail.com', '123456', 1, TRUE),
+(2, 'usuario1',  'usuario1@gmail.com', '123456', 2, TRUE),
+(3, 'usuario2',  'usuario2@gmail.com', '123456', 2, TRUE),
+(4, 'usuario3',  'usuario3@gmail.com', '123456', 2, TRUE);
+
+
+INSERT INTO lecturas (id_usuario, id_libro, fecha_prestamo, fecha_devolucion) VALUES
+(2, 7,  '2025-10-27', '2025-11-03'),  
+(3, 9,  '2025-10-27', '2025-11-03'),  
+(4, 22, '2025-10-27', '2025-11-03'),  
+(2, 15, '2025-10-28', '2025-11-05'),   
+(3, 17, '2025-10-28', '2025-11-05'),  
+(4, 35, '2025-10-28', '2025-11-05');   
+
+INSERT INTO actividades (descripcion, fecha, id_usuario, id_libro) VALUES
+('Compra de libro: El Principito', '2025-10-27', 2, 7),   
+('Compra de libro: Dune', '2025-10-27', 3, 9),  
+('Compra de libro: Harry Potter y la Piedra Filosofal', '2025-10-27', 4, 22),  
+('Compra de libro: El Poder del Ahora', '2025-10-28', 2, 15),  
+('Compra de libro: Sapiens: De Animales a Dioses', '2025-10-28', 3, 17),  
+('Compra de libro: Los 7 Hábitos de la Gente Altamente Efectiva', '2025-10-28', 4, 35);
+
+select * from categorias;
+select * from roles;
+select * from usuarios;
+select * from actividades;
+select * from libros;
+select * from lecturas;
+select * from tb_cab_boleta;
+select * from tb_det_boleta;
+
